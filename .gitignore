@@ -1,0 +1,46 @@
+## Build output
+[Bb]in/
+[Oo]bj/
+
+## Visual Studio
+.vs/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+## Visual Studio Code
+.vscode/
+
+## Rider / JetBrains
+.idea/
+*.sln.iml
+
+## NuGet
+*.nupkg
+*.snupkg
+.nuget/
+
+## ASP.NET / .NET
+wwwroot/lib/
+
+## Entity Framework
+# Don't ignore migrations — they should be committed.
+# Migrations/
+
+## Logs
+*.log
+logs/
+
+## Local configuration / secrets
+appsettings.Development.json
+appsettings.Local.json
+secrets.json
+
+## OS files
+.DS_Store
+Thumbs.db
+
+## Test results
+TestResults/
+coverage/
