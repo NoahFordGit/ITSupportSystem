@@ -38,6 +38,7 @@ public enum Category
 } // End enum
 
 
+// Class for Ticket table
 public class Ticket
 {
     [Key]
