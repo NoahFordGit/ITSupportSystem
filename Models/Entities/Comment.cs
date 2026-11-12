@@ -21,8 +21,8 @@ public class Comment
     public Ticket? Ticket {get; set;}
 
     // User fields (uncomment AFTER user is made)
-    // public int UserId {get; set;}
-    // public User? User {get; set;}
+    // public string Id {get; set;}
+    // public User? ApplicationUser {get; set;}
 
 
 

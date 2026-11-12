@@ -24,7 +24,7 @@ public class Log
 
 
     // User fields (uncomment AFTER user is made)
-    // public int UserId {get; set;}
-    // public User? User {get; set;}
+    // public string Id {get; set;}
+    // public ApplicationUser? ApplicationUser {get; set;}
 
 } // End class
