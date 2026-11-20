@@ -2,6 +2,8 @@ using ITSupportSystem.Core.Entities;
 using ITSupportSystem.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ITSupportSystem.Core.Constants;
+using ITSupportSystem.API.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,9 +19,12 @@ builder.Services.AddIdentityCore<ApplicationUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 // Set up authorization policies
-builder.Services.AddAuthorizationBuilder();
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy(Policies.RequireAdmin, p => p.RequireRole(Roles.Admin))
+    .AddPolicy(Policies.RequireStaffOrAdmin, p => p.RequireRole(Roles.Admin, Roles.Staff));
 
 builder.Services.AddControllers();
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
@@ -38,6 +43,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
