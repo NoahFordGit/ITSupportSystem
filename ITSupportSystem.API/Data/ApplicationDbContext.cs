@@ -6,5 +6,4 @@ namespace ITSupportSystem.Data;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options)
 {
-    public DbSet<ApplicationUser> ApplicationUsers => Set<ApplicationUser>();
 }
