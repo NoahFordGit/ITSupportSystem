@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
+using ITSupportSystem.Core.Constants;
 
-namespace ITSupportSystem.Data;
+namespace ITSupportSystem.API.Data;
 
 public static class IdentitySeeder
 {
@@ -8,9 +9,7 @@ public static class IdentitySeeder
     {
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
-        string[] roles = ["Admin", "Staff", "User"];
-
-        foreach (var role in roles)
+        foreach (var role in Roles.All)
         {
             if (!await roleManager.RoleExistsAsync(role))
             {
