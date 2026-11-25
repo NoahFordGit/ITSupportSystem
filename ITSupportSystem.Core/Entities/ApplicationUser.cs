@@ -10,7 +10,7 @@ public class ApplicationUser : IdentityUser
 
     Identity
       string   Id                    - Primary key (GUID as text), auto-generated
-      string?  UserName              - Login name (set to Email)
+      string?  UserName              - Login name
       string?  NormalizedUserName    - Uppercased UserName for lookups (managed by UserManager)
       string?  Email                 - Email address
       string?  NormalizedEmail       - Uppercased Email for lookups (managed by UserManager)
