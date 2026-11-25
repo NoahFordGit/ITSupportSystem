@@ -14,7 +14,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(connectionString));
 
-builder.Services.AddIdentityCore<ApplicationUser>()
+builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -30,10 +30,11 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-// Seed Identity Roles if they do not exist
+// Seed data
 using (var scope = app.Services.CreateScope())
 {
     await IdentitySeeder.SeedRolesAsync(scope.ServiceProvider);
+    await IdentitySeeder.SeedAdminAsync(scope.ServiceProvider);
 }
 
 // Configure the HTTP request pipeline.
@@ -49,5 +50,23 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// prefix all login and auth methods with api/auth as opposed to being top level
+app.MapGroup("api/auth")
+    .MapIdentityApi<ApplicationUser>()
+    .AddEndpointFilter(async (context, next) =>
+    {
+        // Block the built-in register endpoint. Check the matched route pattern,
+        // not the request path, so casing or a trailing slash can't get around it.
+        var endpoint = context.HttpContext.GetEndpoint() as RouteEndpoint;
+        var pattern = endpoint?.RoutePattern.RawText;
+
+        if (pattern is not null && pattern.EndsWith("/register", StringComparison.OrdinalIgnoreCase))
+        {
+            return Results.NotFound();
+        }
+
+        return await next(context);
+    });
 
 app.Run();
