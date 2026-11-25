@@ -1,4 +1,5 @@
-using ITSupportSystem.API.Data;
+using Microsoft.EntityFrameworkCore;
+using ITSupportSystem.Data;
 using ITSupportSystem.Core.Entities;
 
 namespace ITSupportSystem.API.Repositories;

@@ -1,5 +1,6 @@
-using ITSupportSystem.API.Data;
+using Microsoft.EntityFrameworkCore;
 using ITSupportSystem.Core.Entities;
+using ITSupportSystem.Data;
 
 namespace ITSupportSystem.API.Repositories;
 
@@ -37,7 +38,7 @@ public class LogRepository : ILogRepository
         // log.Id = applictionUser.Id;
         // log.ApplicationUser = applicationUser;
 
-        // _context.Comment.Add(comment);
+        // _context.Log.Add(log);
         await _context.SaveChangesAsync();
         return log;
     } // End method
@@ -63,7 +64,7 @@ public class LogRepository : ILogRepository
         throw new NotImplementedException();
     } // End method
 
-    // Update comment method
+    // Update log method
     public async Task<Log?> UpdateAsync(int oldId, Log log)
     {
         var existing = await _context.Log.FindAsync(oldId, log.LogId);
