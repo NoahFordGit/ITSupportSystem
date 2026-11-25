@@ -1,6 +1,6 @@
 using ITSupportSystem.Core.Entities;
 
-namespace ITSupportSystem.API.Repositories;
+namespace ITSupportSystem.Core.Interfaces;
 
 public interface ITicketRepository
 {
