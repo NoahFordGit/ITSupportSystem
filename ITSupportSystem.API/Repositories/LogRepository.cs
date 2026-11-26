@@ -11,8 +11,6 @@ public class LogRepository(ApplicationDbContext context) : ILogRepository
     // DbContext setup
     private readonly ApplicationDbContext _context = context;
 
-    // NOTE: all commented code blocks (unless otherwise stated) are related to the ApplicationUser model.
-    //      These blocks have been commented out for now to avoid errors but need to be uncommented at some point in time.
 
     // Create log method
     public async Task<Log?> CreateAsync(int TicketId, string Id, Log log)
@@ -46,8 +44,6 @@ public class LogRepository(ApplicationDbContext context) : ILogRepository
             .Include(l => l.Ticket)
             .Include(l => l.ApplicationUser)
             .ToListAsync();
-
-        throw new NotImplementedException();
     } // End method
 
     // Read(one) log method
@@ -73,8 +69,6 @@ public class LogRepository(ApplicationDbContext context) : ILogRepository
         existing.LoggedOn = log.LoggedOn;
         await _context.SaveChangesAsync();
         return existing;
-
-        throw new NotImplementedException();
     } // End method
 
     // Delete log method

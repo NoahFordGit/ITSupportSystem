@@ -12,9 +12,6 @@ public class CommentRepository(ApplicationDbContext context) : ICommentRepositor
     private readonly ApplicationDbContext _context = context;
 
 
-    // NOTE: all commented code blocks (unless otherwise stated) are related to the ApplicationUser model.
-    //          These blocks have been commented out for now to avoid errors but need to be uncommented at some point in time.
-
     // Create comment method
     public async Task<Comment?> CreateAsync(int TicketId, string Id, Comment comment)
     {
@@ -48,7 +45,6 @@ public class CommentRepository(ApplicationDbContext context) : ICommentRepositor
             .Include(c => c.Ticket)
             .Include(c => c.ApplicationUser)
             .ToListAsync();
-        throw new NotImplementedException();
     } // End method
 
 
@@ -59,7 +55,6 @@ public class CommentRepository(ApplicationDbContext context) : ICommentRepositor
             .Include(c => c.Ticket)
             .Include(c => c.ApplicationUser)
             .FirstOrDefaultAsync(c => c.CommentId == CommentId);
-         throw new NotImplementedException();
     } // End method
 
 
