@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ITSupportSystem.Core.Constants;
 using ITSupportSystem.API.Data;
+using ITSupportSystem.API.Repositories;
+using ITSupportSystem.Core.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +26,10 @@ builder.Services.AddAuthorizationBuilder()
     .AddPolicy(Policies.RequireStaffOrAdmin, p => p.RequireRole(Roles.Admin, Roles.Staff));
 
 builder.Services.AddControllers();
+
+builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<ILogRepository, LogRepository>();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
