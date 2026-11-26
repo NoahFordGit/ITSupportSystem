@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ITSupportSystem.Core.Entities;
+using ITSupportSystem.Core.Interfaces;
 using ITSupportSystem.API.Data;
 using ITSupportSystem.API.Repositories;
 // using ITSupportSystem.API.Repositories;

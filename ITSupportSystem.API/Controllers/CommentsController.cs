@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using ITSupportSystem.Core.Interfaces;
 using ITSupportSystem.Core.Entities;
 using ITSupportSystem.API.Data;
 using ITSupportSystem.API.Repositories;
-// using ITSupportSystem.API.Repositories;
 
 namespace ITSupportSystem.API.Controllers;
 
