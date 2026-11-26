@@ -7,17 +7,9 @@ using ITSupportSystem.API.Repositories;
 namespace ITSupportSystem.API.Controllers;
 
 [ApiController]
-[Route("api/tickets")]
-
-public class TicketController : ControllerBase
+[Route("api/[controller]")]
+public class TicketsController(ITicketRepository repository) : ControllerBase
 {
 
-    private readonly ITicketRepository _repository;
-
-    public TicketController(ITicketRepository repository)
-    {
-       _repository = repository;
-    } // End constructor 
-
-
+    private readonly ITicketRepository _repository = repository;
 } // End class
