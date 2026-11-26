@@ -24,18 +24,18 @@ public class CommentRepository(ApplicationDbContext context) : ICommentRepositor
             return null;
         } // End if 
 
-        // var user = await _context.Users.FindAsync(Id);      // Was ApplicationUser then Users
-        // if (user == null)
-        // {
-        //     return null;
-        // } // End if
+        var user = await _context.Users.FindAsync(Id); 
+        if (user == null)
+        {
+            return null;
+        } // End if
 
         comment.TicketId = ticket.TicketId;
         comment.Ticket = ticket;
-        // comment.Id = applictionUser.Id;
-        // comment.ApplicationUser = applicationUser;
+        comment.UserId = user.Id;
+        comment.ApplicationUser = user;
 
-        // _context.Comment.Add(comment);
+        _context.Comments.Add(comment);
         await _context.SaveChangesAsync();
         return comment;
 
@@ -44,10 +44,10 @@ public class CommentRepository(ApplicationDbContext context) : ICommentRepositor
     // Read all comments method
     public async Task<IEnumerable<Comment>> ReadAllAsync()
     {
-        // return await _context.Comment
-        //     .Include(c => c.Ticket)
-        //     .Include(c => c.ApplicationUser)
-        //     .ToListAsync();
+        return await _context.Comments
+            .Include(c => c.Ticket)
+            .Include(c => c.ApplicationUser)
+            .ToListAsync();
         throw new NotImplementedException();
     } // End method
 
@@ -55,10 +55,10 @@ public class CommentRepository(ApplicationDbContext context) : ICommentRepositor
     // Read(one) comment method
     public async Task<Comment?> ReadAsync(int CommentId)
     {
-        // return await _context.Comment
-        //     .Include(c => c.Ticket)
-        //     .Include(c => c.ApplicationUser)
-        //     .FirstOrDefaultAsync(c => c.);
+        return await _context.Comments
+            .Include(c => c.Ticket)
+            .Include(c => c.ApplicationUser)
+            .FirstOrDefaultAsync(c => c.CommentId == CommentId);
          throw new NotImplementedException();
     } // End method
 

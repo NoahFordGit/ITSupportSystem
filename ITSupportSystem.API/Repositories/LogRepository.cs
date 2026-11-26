@@ -23,18 +23,18 @@ public class LogRepository(ApplicationDbContext context) : ILogRepository
             return null;
         } // End if 
 
-        // var user = await _context.ApplicationUser.FindAsync(Id);
-        // if (user == null)
-        // {
-        //     return null;
-        // } // End if
+        var user = await _context.Users.FindAsync(Id);
+        if (user == null)
+        {
+            return null;
+        } // End if
 
         log.TicketId = ticket.TicketId;
         log.Ticket = ticket;
-        // log.Id = applictionUser.Id;
-        // log.ApplicationUser = applicationUser;
+        log.UserId = user.Id;
+        log.ApplicationUser = user;
 
-        // _context.Log.Add(log);
+        _context.Logs.Add(log);
         await _context.SaveChangesAsync();
         return log;
     } // End method
@@ -42,10 +42,10 @@ public class LogRepository(ApplicationDbContext context) : ILogRepository
     // Read all logs method
     public async Task<IEnumerable<Log>> ReadAllAsync()
     {
-        // return await _context.Log
-        //     .Include(c => c.Ticket)
-        //     .Include(c => c.ApplicationUser)
-        //     .ToListAsync();
+        return await _context.Logs
+            .Include(l => l.Ticket)
+            .Include(l => l.ApplicationUser)
+            .ToListAsync();
 
         throw new NotImplementedException();
     } // End method
@@ -53,11 +53,10 @@ public class LogRepository(ApplicationDbContext context) : ILogRepository
     // Read(one) log method
     public async Task<Log?> ReadAsync(int LogId)
     {
-        // return await _context.Log
-        //     .Include(c => c.Ticket)
-        //     .Include(c => c.ApplicationUser)
-        //     .FirstOrDefaultAsync(c => c.);
-        throw new NotImplementedException();
+        return await _context.Logs
+            .Include(l => l.Ticket)
+            .Include(l => l.ApplicationUser)
+            .FirstOrDefaultAsync(l => l.LogId == LogId);
     } // End method
 
     // Update log method
