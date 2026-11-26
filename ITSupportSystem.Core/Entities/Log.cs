@@ -23,7 +23,7 @@ public class Log
     public Ticket? Ticket {get; set;}
 
     // User fields
-    public string Id {get; set;}
+    public string UserId {get; set;} = string.Empty;
     public ApplicationUser? ApplicationUser {get; set;}
 
 } // End class

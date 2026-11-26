@@ -65,5 +65,7 @@ public class Ticket
 
     public ICollection<Comment> Comment {get; set;} = new List<Comment>();
 
-    
+    [Required]
+    public string UserId { get; set; } = string.Empty;
+    public ApplicationUser? CreatedBy { get; set; }
 } // End class
