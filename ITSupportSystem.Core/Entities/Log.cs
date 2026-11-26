@@ -22,9 +22,8 @@ public class Log
     public int TicketId {get; set;}
     public Ticket? Ticket {get; set;}
 
-
-    // User fields (uncomment AFTER user is made)
-    // public string Id {get; set;}
-    // public ApplicationUser? ApplicationUser {get; set;}
+    // User fields
+    public string Id {get; set;}
+    public ApplicationUser? ApplicationUser {get; set;}
 
 } // End class

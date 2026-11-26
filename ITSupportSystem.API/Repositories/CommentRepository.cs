@@ -29,7 +29,7 @@ public class CommentRepository : ICommentRepository
             return null;
         } // End if 
 
-        // var user = await _context.ApplicationUser.FindAsync(Id);
+        // var user = await _context.Users.FindAsync(Id);      // Was ApplicationUser then Users
         // if (user == null)
         // {
         //     return null;
