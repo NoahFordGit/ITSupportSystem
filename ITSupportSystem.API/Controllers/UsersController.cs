@@ -9,6 +9,65 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ITSupportSystem.API.Controllers;
 
+/// <summary>
+/// User-management endpoints for Staff and Admins. These actions work on any account by id.
+/// For a user managing their own account, see <see cref="AccountController"/>.
+/// </summary>
+/// <remarks>
+/// <list type="bullet">
+///   <item>
+///     <term>GET api/users</term>
+///     <description>
+///     Staff or Admin. Returns every user with their role as a list of <see cref="UserResponse"/>.
+///     </description>
+///   </item>
+///   <item>
+///     <term>GET api/users/{id}</term>
+///     <description>
+///     Staff or Admin. Returns one user as a <see cref="UserResponse"/>, or 404 if not found.
+///     Named route: <c>GetUserById</c>.
+///     </description>
+///   </item>
+///   <item>
+///     <term>POST api/users</term>
+///     <description>
+///     Admin only. Creates a user from a <see cref="CreateUserRequest"/> with the requested role.
+///     If the role assignment fails, the new account is deleted.
+///     Returns 201 Created (Location points to <c>GetUserById</c>) or 400 with Identity errors.
+///     </description>
+///   </item>
+///   <item>
+///     <term>PUT api/users/{id}</term>
+///     <description>
+///     Admin only. Updates a user's username, email, first/last name and phone number from an
+///     <see cref="UpdateUserRequest"/>. Does not change password or role.
+///     Returns 204 No Content, 400 with Identity errors, or 404.
+///     </description>
+///   </item>
+///   <item>
+///     <term>DELETE api/users/{id}</term>
+///     <description>
+///     Admin only. Deletes a user. Refuses to delete the last remaining Admin.
+///     Returns 204 No Content, 400 (last Admin or Identity errors), or 404.
+///     </description>
+///   </item>
+///   <item>
+///     <term>GET api/users/roles</term>
+///     <description>
+///     Any authenticated user. Returns the names of all roles in the system.
+///     </description>
+///   </item>
+///   <item>
+///     <term>PUT api/users/{id}/role</term>
+///     <description>
+///     Admin only. Replaces a user's role with the one in a <see cref="ChangeRoleRequest"/>.
+///     Does nothing if the user already has only that role. Refuses to demote the last remaining Admin.
+///     If adding the new role fails, the previous roles are restored.
+///     Returns 204 No Content, 400 (last Admin or Identity errors), or 404.
+///     </description>
+///   </item>
+/// </list>
+/// </remarks>
 [ApiController]
 [Route("api/[controller]")]
 public class UsersController(
