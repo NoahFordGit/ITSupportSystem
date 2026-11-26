@@ -1,5 +1,3 @@
-using ITSupportSystem.Core.Entities;
-
 namespace ITSupportSystem.Core.Interfaces;
 
 public interface ICommentRepository
