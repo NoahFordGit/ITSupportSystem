@@ -4,11 +4,49 @@ using ITSupportSystem.Core.Constants;
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 
 namespace ITSupportSystem.API.Controllers;
 
+/// <summary>
+/// Self-service account endpoints for the currently signed-in user.
+/// Every action works on the caller's own account, which is found from the auth cookie/claims.
+/// </summary>
+/// <remarks>
+/// <list type="bullet">
+///   <item>
+///     <term>POST api/account/register</term>
+///     <description>
+///     Anonymous. Creates a new account from a <see cref="RegisterUserRequest"/> and assigns the
+///     <c>User</c> role. If the role assignment fails, the new account is deleted.
+///     Returns 201 Created with a <see cref="UserResponse"/>, or 400 with Identity errors.
+///     </description>
+///   </item>
+///   <item>
+///     <term>GET api/account/me</term>
+///     <description>
+///     Authenticated. Returns the caller's profile and role as a <see cref="UserResponse"/>.
+///     Returns 404 if the account no longer exists.
+///     </description>
+///   </item>
+///   <item>
+///     <term>PUT api/account/me</term>
+///     <description>
+///     Authenticated. Updates the caller's username, email, first/last name and phone number from an
+///     <see cref="UpdateUserRequest"/>. Does not change password or role.
+///     Returns 204 No Content, 400 with Identity errors, or 404.
+///     </description>
+///   </item>
+///   <item>
+///     <term>DELETE api/account/me</term>
+///     <description>
+///     Authenticated. Deletes the caller's account after confirming the password in a
+///     <see cref="DeleteUserRequest"/>. Refuses to delete the last remaining Admin.
+///     Returns 204 No Content, 400 (wrong password, last Admin, or Identity errors), or 404.
+///     </description>
+///   </item>
+/// </list>
+/// </remarks>
 [ApiController]
 [Route("api/[controller]")]
 public class AccountController(

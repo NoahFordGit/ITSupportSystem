@@ -116,13 +116,17 @@ namespace ITSupportSystem.API.Migrations
                     b.Property<int>("TicketId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("CommentId");
 
                     b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("TicketId");
 
-                    b.ToTable("Comment");
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("ITSupportSystem.Core.Entities.Log", b =>
@@ -153,13 +157,17 @@ namespace ITSupportSystem.API.Migrations
                     b.Property<int>("TicketId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("LogId");
 
                     b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("TicketId");
 
-                    b.ToTable("Log");
+                    b.ToTable("Logs");
                 });
 
             modelBuilder.Entity("ITSupportSystem.Core.Entities.Ticket", b =>
@@ -169,6 +177,9 @@ namespace ITSupportSystem.API.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedById")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -190,9 +201,15 @@ namespace ITSupportSystem.API.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("TicketId");
 
-                    b.ToTable("Ticket");
+                    b.HasIndex("CreatedById");
+
+                    b.ToTable("Tickets");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -355,6 +372,15 @@ namespace ITSupportSystem.API.Migrations
                     b.Navigation("ApplicationUser");
 
                     b.Navigation("Ticket");
+                });
+
+            modelBuilder.Entity("ITSupportSystem.Core.Entities.Ticket", b =>
+                {
+                    b.HasOne("ITSupportSystem.Core.Entities.ApplicationUser", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById");
+
+                    b.Navigation("CreatedBy");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

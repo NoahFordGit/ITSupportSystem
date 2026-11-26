@@ -1,9 +1,11 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 // using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace ITSupportSystem.Core.Entities;
 
 // Enum for priority field
+[JsonConverter(typeof(JsonStringEnumConverter<Priority>))]
 public enum Priority
 {
     Low, 
@@ -14,6 +16,7 @@ public enum Priority
 
 
 // Enum for status field
+[JsonConverter(typeof(JsonStringEnumConverter<Status>))]
 public enum Status
 {
     New, 
@@ -27,6 +30,7 @@ public enum Status
 
 
 // Enum for category field
+[JsonConverter(typeof(JsonStringEnumConverter<Category>))]
 public enum Category
 {
     Hardware,
@@ -57,13 +61,15 @@ public class Ticket
     [Required]
     public Status Status {get; set;}
 
-    [DataType(DataType.Date)]
-    public DateTime CreatedAt {get; set;}
+    [Required, DataType(DataType.Date)]
+    public DateTime CreatedAt {get; set;} = DateTime.UtcNow;
 
-    [DataType(DataType.Date)]
-    public DateTime UpdatedAt {get; set;}
+    [Required, DataType(DataType.Date)]
+    public DateTime UpdatedAt {get; set;} = DateTime.UtcNow;
 
     public ICollection<Comment> Comment {get; set;} = new List<Comment>();
 
-    
+    [Required]
+    public string UserId { get; set; } = string.Empty;
+    public ApplicationUser? CreatedBy { get; set; }
 } // End class
