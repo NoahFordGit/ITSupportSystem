@@ -5,25 +5,20 @@ using ITSupportSystem.Core.Interfaces;
 
 namespace ITSupportSystem.API.Repositories;
 
-public class CommentRepository : ICommentRepository
+public class CommentRepository(ApplicationDbContext context) : ICommentRepository
 {
 
     // DbContext setup
-    private readonly ApplicationDbContext _context;
-    
-    public CommentRepository(ApplicationDbContext context)
-    {
-        _context = context;
-    } // End method
+    private readonly ApplicationDbContext _context = context;
 
 
-// NOTE: all commented code blocks (unless otherwise stated) are related to the ApplicationUser model.
-//          These blocks have been commented out for now to avoid errors but need to be uncommented at some point in time.
+    // NOTE: all commented code blocks (unless otherwise stated) are related to the ApplicationUser model.
+    //          These blocks have been commented out for now to avoid errors but need to be uncommented at some point in time.
 
     // Create comment method
     public async Task<Comment?> CreateAsync(int TicketId, string Id, Comment comment)
     {
-        var ticket = await _context.Ticket.FindAsync(TicketId);
+        var ticket = await _context.Tickets.FindAsync(TicketId);
         if (ticket == null)
         {
             return null;
@@ -71,7 +66,7 @@ public class CommentRepository : ICommentRepository
     // Update comment mehtod
     public async Task<Comment?> UpdateAsync(int oldId, Comment comment)
     {
-        var existing = await _context.Comment.FindAsync(oldId, comment.CommentId);
+        var existing = await _context.Comments.FindAsync(oldId, comment.CommentId);
         if (existing == null)
         {
             return null;
@@ -87,13 +82,13 @@ public class CommentRepository : ICommentRepository
     // Delete comment method
     public async Task<bool> DeleteAsync(Comment comment)
     {
-        var existing = await _context.Comment.FindAsync(comment.CommentId);
+        var existing = await _context.Comments.FindAsync(comment.CommentId);
         if (existing == null)
         {
             return false;
         } // End if
 
-        _context.Comment.Remove(existing);
+        _context.Comments.Remove(existing);
         await _context.SaveChangesAsync();
         return true;
     } // End method

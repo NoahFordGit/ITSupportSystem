@@ -5,24 +5,19 @@ using ITSupportSystem.Core.Interfaces;
 
 namespace ITSupportSystem.API.Repositories;
 
-public class LogRepository : ILogRepository
+public class LogRepository(ApplicationDbContext context) : ILogRepository
 {
 
     // DbContext setup
-    private readonly ApplicationDbContext _context;
-    
-    public LogRepository(ApplicationDbContext context)
-    {
-        _context = context;
-    } // End method
+    private readonly ApplicationDbContext _context = context;
 
-// NOTE: all commented code blocks (unless otherwise stated) are related to the ApplicationUser model.
-//      These blocks have been commented out for now to avoid errors but need to be uncommented at some point in time.
-    
+    // NOTE: all commented code blocks (unless otherwise stated) are related to the ApplicationUser model.
+    //      These blocks have been commented out for now to avoid errors but need to be uncommented at some point in time.
+
     // Create log method
     public async Task<Log?> CreateAsync(int TicketId, string Id, Log log)
     {
-        var ticket = await _context.Ticket.FindAsync(TicketId);
+        var ticket = await _context.Tickets.FindAsync(TicketId);
         if (ticket == null)
         {
             return null;
@@ -68,7 +63,7 @@ public class LogRepository : ILogRepository
     // Update log method
     public async Task<Log?> UpdateAsync(int oldId, Log log)
     {
-        var existing = await _context.Log.FindAsync(oldId, log.LogId);
+        var existing = await _context.Logs.FindAsync(oldId, log.LogId);
         if (existing == null)
         {
             return null;
@@ -86,13 +81,13 @@ public class LogRepository : ILogRepository
     // Delete log method
     public async Task<bool> DeleteAsync(Log log)
     {
-        var existing = await _context.Log.FindAsync(log.LogId);
+        var existing = await _context.Logs.FindAsync(log.LogId);
         if (existing == null)
         {
             return false;
         } // End if
 
-        _context.Log.Remove(existing);
+        _context.Logs.Remove(existing);
         await _context.SaveChangesAsync();
         return true;
     } // End method
