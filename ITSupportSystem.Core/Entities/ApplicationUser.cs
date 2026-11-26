@@ -37,9 +37,9 @@ public class ApplicationUser : IdentityUser
     [Required]
     public string FirstName { get; set; } = string.Empty;
 
-    [Required]
+    [Required, DataType(DataType.Date)]
     public string LastName { get; set; } = string.Empty;
 
-    [Required]
+    [Required, DataType(DataType.Date)]
     public DateTime DateCreated { get; set; } = DateTime.UtcNow;
 }
