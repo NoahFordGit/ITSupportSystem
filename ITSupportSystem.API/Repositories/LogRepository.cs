@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ITSupportSystem.Core.Entities;
-using ITSupportSystem.Data;
+using ITSupportSystem.API.Data;
 using ITSupportSystem.Core.Interfaces;
 
 namespace ITSupportSystem.API.Repositories;

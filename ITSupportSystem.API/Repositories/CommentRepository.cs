@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using ITSupportSystem.Data;
+using ITSupportSystem.API.Data;
 using ITSupportSystem.Core.Entities;
 using ITSupportSystem.Core.Interfaces;
 

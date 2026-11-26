@@ -1,4 +1,4 @@
-using ITSupportSystem.Data;
+using ITSupportSystem.API.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;

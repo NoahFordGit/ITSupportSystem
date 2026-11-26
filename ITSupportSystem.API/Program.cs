@@ -1,9 +1,8 @@
 using ITSupportSystem.Core.Entities;
-using ITSupportSystem.Data;
+using ITSupportSystem.API.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ITSupportSystem.Core.Constants;
-using ITSupportSystem.API.Data;
 using ITSupportSystem.API.Repositories;
 using ITSupportSystem.Core.Interfaces;
 
