@@ -36,7 +36,13 @@ public class TicketRepository(ApplicationDbContext context) : ITicketRepository
             .FirstOrDefaultAsync(t => t.TicketId == TicketId);
     } // End method
 
-
+    public async Task<IEnumerable<Ticket>> ReadByUserAsync(string UserId)
+    {
+        return await _context.Tickets
+            .Where(t => t.UserId == UserId)
+            .ToListAsync();
+    }
+    
     // Update ticket method
     public async Task<Ticket?> UpdateAsync(Ticket ticket)
     {
@@ -50,6 +56,7 @@ public class TicketRepository(ApplicationDbContext context) : ITicketRepository
         existing.Description = ticket.Description;
         existing.Priority = ticket.Priority;
         existing.Status = ticket.Status;
+        existing.UpdatedAt = DateTime.UtcNow;
 
         await _context.SaveChangesAsync();
         return existing;
