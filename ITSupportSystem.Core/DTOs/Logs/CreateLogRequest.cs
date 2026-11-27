@@ -7,7 +7,7 @@ namespace ITSupportSystem.Core.DTOs.Logs;
 public record CreateLogRequest
 {
     [Required]
-    public int TicketId {get; set;}
+    public int? TicketId {get; set;}
 
     [Required, StringLength(256)]
     public string LogAction {get; set;} = string.Empty;
