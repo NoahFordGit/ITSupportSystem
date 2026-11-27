@@ -98,19 +98,12 @@ namespace ITSupportSystem.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Id")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("TicketId")
@@ -122,9 +115,9 @@ namespace ITSupportSystem.API.Migrations
 
                     b.HasKey("CommentId");
 
-                    b.HasIndex("ApplicationUserId");
-
                     b.HasIndex("TicketId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Comments");
                 });
@@ -135,15 +128,9 @@ namespace ITSupportSystem.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LogAction")
@@ -163,9 +150,9 @@ namespace ITSupportSystem.API.Migrations
 
                     b.HasKey("LogId");
 
-                    b.HasIndex("ApplicationUserId");
-
                     b.HasIndex("TicketId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Logs");
                 });
@@ -177,9 +164,6 @@ namespace ITSupportSystem.API.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("CreatedById")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -207,7 +191,7 @@ namespace ITSupportSystem.API.Migrations
 
                     b.HasKey("TicketId");
 
-                    b.HasIndex("CreatedById");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Tickets");
                 });
@@ -342,45 +326,51 @@ namespace ITSupportSystem.API.Migrations
 
             modelBuilder.Entity("ITSupportSystem.Core.Entities.Comment", b =>
                 {
-                    b.HasOne("ITSupportSystem.Core.Entities.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId");
-
                     b.HasOne("ITSupportSystem.Core.Entities.Ticket", "Ticket")
                         .WithMany("Comment")
                         .HasForeignKey("TicketId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ApplicationUser");
+                    b.HasOne("ITSupportSystem.Core.Entities.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Ticket");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ITSupportSystem.Core.Entities.Log", b =>
                 {
-                    b.HasOne("ITSupportSystem.Core.Entities.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId");
-
                     b.HasOne("ITSupportSystem.Core.Entities.Ticket", "Ticket")
                         .WithMany()
                         .HasForeignKey("TicketId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ApplicationUser");
+                    b.HasOne("ITSupportSystem.Core.Entities.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Ticket");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ITSupportSystem.Core.Entities.Ticket", b =>
                 {
-                    b.HasOne("ITSupportSystem.Core.Entities.ApplicationUser", "CreatedBy")
+                    b.HasOne("ITSupportSystem.Core.Entities.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("CreatedById");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("CreatedBy");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
