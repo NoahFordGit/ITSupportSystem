@@ -1,0 +1,57 @@
+:root {
+    --brand:        #4f46e5;  /* button backgrounds (white text passes contrast) */
+    --brand-light:   #6366f1;  /* hover: goes LIGHTER on dark backgrounds */
+    --brand-lighter:  #a5b4fc;  /* NEW: links and active tab text */
+    --background:   #0f172a;  /* page background */
+    --surface:      #1e293b;  /* cards, panels */
+    --input:        #0f172a;  /* NEW: input fields, darker than the card */
+    --text:         #f1f5f9;  /* main text */
+    --text-muted:   #94a3b8;  /* labels, hints */
+    --border:       #334155;  /* input and card borders */
+    --danger:       #f87171;  /* errors, softer red for dark backgrounds */
+    --success:      #4ade80;  /* NEW: password checks, "resolved" status */
+    --focus-ring:   rgba(99, 102, 241, 0.45); /* NEW: outline on focused inputs */
+
+    --radius-sm:   6px;     /* inputs, buttons, small badges */
+    --radius-md:   8px;     /* dropdowns, tab containers, alerts */
+    --radius-lg:   12px;    /* cards (the login card) */
+    --radius-full: 9999px;  /* pills, status tags, avatars */
+
+    --font-body: 'Geist', system-ui, sans-serif;
+    --font-mono: 'Geist Mono', ui-monospace, monospace;
+
+    --bs-body-bg: var(--background);
+    --bs-body-color: var(--text);
+    --bs-secondary-color: var(--text-muted);
+    --bs-body-font-family: var(--font-body);
+    --bs-font-monospace: var(--font-mono);
+    --bs-border-color: var(--border);
+    --bs-link-color: var(--brand-lighter);
+    --bs-primary: var(--brand);
+    --bs-danger: var(--danger);
+    --bs-success: var(--success);
+    --bs-border-radius-sm: var(--radius-sm);
+    --bs-border-radius: var(--radius-md);
+    --bs-border-radius-lg: var(--radius-lg);
+}
+
+.btn-primary {
+    /* Default */
+    --bs-btn-bg:                    var(--brand);
+    --bs-btn-border-color:          var(--brand);
+
+    /* Hover */
+    --bs-btn-hover-bg:              var(--brand-light);
+    --bs-btn-hover-border-color:    var(--brand-light);
+
+    /* Active (while clicking) */
+    --bs-btn-active-bg:             var(--brand-light);
+    --bs-btn-active-border-color:   var(--brand-light);
+
+    /* Disabled */
+    --bs-btn-disabled-bg:           var(--brand);
+    --bs-btn-disabled-border-color: var(--brand);
+
+    /* Keyboard focus glow: r, g, b of --brand-light */
+    --bs-btn-focus-box-shadow-rgb:      0 0 0 0.25rem var(--focus-ring);
+}
