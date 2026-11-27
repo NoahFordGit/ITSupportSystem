@@ -14,7 +14,7 @@ public class Comment
     public string Content {get; set;} = string.Empty;
 
     [DataType(DataType.Date)]
-    public DateTime CreatedOn {get; set;}
+    public DateTime CreatedOn {get; set;} = DateTime.UtcNow;
 
     // Ticket fields
     public int TicketId {get; set;}
