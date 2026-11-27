@@ -57,18 +57,24 @@ public class CommentRepository(ApplicationDbContext context) : ICommentRepositor
             .FirstOrDefaultAsync(c => c.CommentId == CommentId);
     } // End method
 
+    public async Task<IEnumerable<Comment>> ReadByTicketAsync(int ticketId)
+    {
+        return await _context.Comments
+            .Where(c => c.TicketId == ticketId)
+            .OrderBy(c => c.CreatedOn)
+            .ToListAsync();
+    }
 
     // Update comment mehtod
     public async Task<Comment?> UpdateAsync(int oldId, Comment comment)
     {
-        var existing = await _context.Comments.FindAsync(oldId, comment.CommentId);
+        var existing = await _context.Comments.FindAsync(oldId);
         if (existing == null)
         {
             return null;
         } // End if
 
         existing.Content = comment.Content;
-        existing.CreatedOn = comment.CreatedOn;
         await _context.SaveChangesAsync();
         return existing;
     } // End method
