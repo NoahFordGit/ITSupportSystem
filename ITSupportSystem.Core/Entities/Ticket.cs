@@ -71,5 +71,5 @@ public class Ticket
 
     [Required]
     public string UserId { get; set; } = string.Empty;
-    public ApplicationUser? CreatedBy { get; set; }
+    public ApplicationUser? User { get; set; }
 } // End class

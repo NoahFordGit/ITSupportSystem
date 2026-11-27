@@ -16,7 +16,7 @@ public class Log
     public string Description {get; set;} = string.Empty;
 
     [DataType(DataType.Date)]
-    public DateTime LoggedOn {get; set;}
+    public DateTime LoggedOn {get; set;} = DateTime.UtcNow;
 
     // Ticket fields
     public int TicketId {get; set;}
@@ -24,6 +24,6 @@ public class Log
 
     // User fields
     public string UserId {get; set;} = string.Empty;
-    public ApplicationUser? ApplicationUser {get; set;}
+    public ApplicationUser? User {get; set;}
 
 } // End class

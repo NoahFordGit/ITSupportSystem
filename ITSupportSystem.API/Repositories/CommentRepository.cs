@@ -30,7 +30,7 @@ public class CommentRepository(ApplicationDbContext context) : ICommentRepositor
         comment.TicketId = ticket.TicketId;
         comment.Ticket = ticket;
         comment.UserId = user.Id;
-        comment.ApplicationUser = user;
+        comment.User = user;
 
         _context.Comments.Add(comment);
         await _context.SaveChangesAsync();
@@ -43,7 +43,7 @@ public class CommentRepository(ApplicationDbContext context) : ICommentRepositor
     {
         return await _context.Comments
             .Include(c => c.Ticket)
-            .Include(c => c.ApplicationUser)
+            .Include(c => c.User)
             .ToListAsync();
     } // End method
 
@@ -53,7 +53,7 @@ public class CommentRepository(ApplicationDbContext context) : ICommentRepositor
     {
         return await _context.Comments
             .Include(c => c.Ticket)
-            .Include(c => c.ApplicationUser)
+            .Include(c => c.User)
             .FirstOrDefaultAsync(c => c.CommentId == CommentId);
     } // End method
 

@@ -30,7 +30,7 @@ public class LogRepository(ApplicationDbContext context) : ILogRepository
         log.TicketId = ticket.TicketId;
         log.Ticket = ticket;
         log.UserId = user.Id;
-        log.ApplicationUser = user;
+        log.User = user;
 
         _context.Logs.Add(log);
         await _context.SaveChangesAsync();
@@ -42,23 +42,31 @@ public class LogRepository(ApplicationDbContext context) : ILogRepository
     {
         return await _context.Logs
             .Include(l => l.Ticket)
-            .Include(l => l.ApplicationUser)
+            .Include(l => l.User)
             .ToListAsync();
     } // End method
+
+    public async Task<IEnumerable<Log>> ReadByTicketAsync(int ticketId)
+    {
+        return await _context.Logs
+            .Where(l => l.TicketId == ticketId)
+            .OrderBy(l => l.LoggedOn)
+            .ToListAsync();
+    }
 
     // Read(one) log method
     public async Task<Log?> ReadAsync(int LogId)
     {
         return await _context.Logs
             .Include(l => l.Ticket)
-            .Include(l => l.ApplicationUser)
+            .Include(l => l.User)
             .FirstOrDefaultAsync(l => l.LogId == LogId);
     } // End method
 
     // Update log method
     public async Task<Log?> UpdateAsync(int oldId, Log log)
     {
-        var existing = await _context.Logs.FindAsync(oldId, log.LogId);
+        var existing = await _context.Logs.FindAsync(oldId);
         if (existing == null)
         {
             return null;

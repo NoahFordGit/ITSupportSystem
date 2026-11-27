@@ -22,6 +22,6 @@ public class Comment
 
     // User fields
     public string UserId {get; set;} = string.Empty;
-    public ApplicationUser? ApplicationUser {get; set;}
+    public ApplicationUser? User {get; set;}
 
 } // End class
