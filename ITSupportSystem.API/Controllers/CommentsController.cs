@@ -6,21 +6,22 @@ using System.Security.Claims;
 using ITSupportSystem.Core.Constants;
 using Microsoft.AspNetCore.Authorization;
 
-
 namespace ITSupportSystem.API.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
-public class CommentsController(ICommentRepository repository) : ControllerBase
+public class CommentsController(ICommentRepository commentRepository, ITicketRepository ticketRepository) : ControllerBase
 {
+    private readonly ICommentRepository _commentRepo = commentRepository;
+    private readonly ITicketRepository _ticketRepo = ticketRepository;
 
-    private readonly ICommentRepository _repository = repository;
-
-
+    [HttpGet]
+    [Authorize(Policy = Policies.RequireStaffOrAdmin)]
     public async Task<IActionResult> GetAll()
     {
-        var comments = await _repository.ReadAllAsync();
-
+        var comments = await _commentRepo.ReadAllAsync();
+        
         var response = new List<CommentResponse>();
         foreach (var comment in comments)
         {
@@ -30,19 +31,37 @@ public class CommentsController(ICommentRepository repository) : ControllerBase
         return Ok(response);
     } // End method
 
+    [HttpGet("ticket/{ticketId}")]
+    public async Task<IActionResult> GetByTicket(int ticketId)
+    {
+        var ticket = await _ticketRepo.ReadAsync(ticketId);
+        if (ticket is null) return NotFound();
 
+        if (!CanAccess(ticket.UserId)) return Forbid();
+
+        var comments = await _commentRepo.ReadByTicketAsync(ticketId);
+
+        var response = new List<CommentResponse>();
+        foreach (var comment in comments)
+        {
+            response.Add(CommentResponse.FromComment(comment));
+        }
+
+        return Ok(response);
+    }
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var comment = await _repository.ReadAsync(id);
+        var comment = await _commentRepo.ReadAsync(id);
         if (comment is null) return NotFound();
 
-        if (!CanAccess(comment)) return Forbid();
+        var isAuthor = CanAccess(comment.UserId);
+        var isTicketOwner = comment.Ticket is not null && CanAccess(comment.Ticket.UserId);
+
+        if (!isAuthor && !isTicketOwner) return Forbid();
 
         return Ok(CommentResponse.FromComment(comment));
     } // End method
-
-
 
     [HttpPost]
     public async Task<IActionResult> Create(CreateCommentRequest request)
@@ -50,15 +69,18 @@ public class CommentsController(ICommentRepository repository) : ControllerBase
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (userId is null) return Unauthorized();
 
-        var ticket = await _repository.ReadAsync(request.TicketId);
+        var ticket = await _ticketRepo.ReadAsync(request.TicketId);
+        if (ticket is null) return BadRequest("Ticket does not exist");
+
+        if (!CanAccess(ticket.UserId)) return Forbid();
+
         var comment = new Comment
         {
             Content = request.Content,
-            TicketId = request.TicketId,
-            UserId = userId
         };
 
-        var created = await _repository.CreateAsync(request.TicketId, userId, comment);
+        var created = await _commentRepo.CreateAsync(request.TicketId, userId, comment);
+        if (created is null) return BadRequest("Could not create comment");
 
         return CreatedAtAction(
             nameof(GetById),
@@ -67,42 +89,38 @@ public class CommentsController(ICommentRepository repository) : ControllerBase
         );
     } // End method
 
-
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, UpdateCommentRequest request)
     {
-        var comment = await _repository.ReadAsync(id);
+        var comment = await _commentRepo.ReadAsync(id);
         if (comment is null) return NotFound();
 
-        if (!CanAccess(comment)) return Forbid();
+        if (!CanAccess(comment.UserId)) return Forbid();
         
         comment.Content = request.Content;
 
-        await _repository.UpdateAsync(id, comment);
+        var updated = await _commentRepo.UpdateAsync(id, comment);
+        if (updated is null) return NotFound();
+
         return NoContent();
     } // End method
-
 
     [HttpDelete("{id}")]
     [Authorize(Policy = Policies.RequireAdmin)]
     public async Task<IActionResult> Delete(int id)
     {
-        var comment = await _repository.ReadAsync(id);
+        var comment = await _commentRepo.ReadAsync(id);
         if (comment is null) return NotFound();
 
-        await _repository.DeleteAsync(comment);
+        await _commentRepo.DeleteAsync(comment);
         return NoContent();
     } // End method
 
-
-
     // Helper method
-    private bool CanAccess(Comment comment)
+    private bool CanAccess(string ownerId)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         var isStaff = User.IsInRole(Roles.Staff) || User.IsInRole(Roles.Admin);
-        return comment.UserId == userId || isStaff;
+        return ownerId == userId || isStaff;
     } // End method
-
-
 } // End class
