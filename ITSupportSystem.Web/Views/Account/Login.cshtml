@@ -1,0 +1,84 @@
+@model AuthPageViewModel
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = "Login";
+
+    var showRegister = ViewData["ActiveTab"] as string == "register";
+}
+
+<div class="auth-page">
+    <div class="auth-logo">
+        <span>TicketSystem</span>
+    </div>
+    <div class="auth-card">
+
+        <div class="auth-tabs">
+            <button type="button" class="tab @(showRegister ? "" : "active")" data-target="login-form">Log in</button>
+            <button type="button" class="tab @(showRegister ? "active" : "")" data-target="register-form">Register</button>
+        </div>
+
+        <form method="post" asp-action="Login" id="login-form" hidden="@showRegister" novalidate>
+            <h1>Welcome back</h1>
+            <p class="subtitle">Sign into your account</p>
+            
+            <div asp-validation-summary="ModelOnly" class="form-error"></div>
+
+            <div class="field">
+                <label asp-for="Login.Email">Email</label>
+                <input asp-for="Login.Email" autocomplete="email" placeholder="company@email.com" required>
+                <span asp-validation-for="Login.Email" class="field-error"></span>
+            </div>
+
+            <div class="field">
+                <label asp-for="Login.Password">Password</label>
+                <input asp-for="Login.Password" autocomplete="current-password" placeholder="••••••••" required>
+                <span asp-validation-for="Login.Password" class="field-error"></span>
+            </div>
+
+            <label class="checkbox">
+                <input asp-for="Login.RememberMe">
+                Remember me
+            </label>
+
+            <button type="submit" class="btn-submit">Log in</button>
+        </form>
+
+        <form method="post" asp-action="Register" id="register-form" hidden="@(!showRegister)" novalidate>
+            <h1>Create your account</h1>
+            <div asp-validation-summary="ModelOnly" class="form-error"></div>
+
+            <div class="name-row">
+                <div class="field">
+                    <label asp-for="Register.FirstName">First name</label>
+                    <input asp-for="Register.FirstName" autocomplete="given-firstname" placeholder="Brock" required />
+                    <span asp-validation-for="Register.FirstName"></span>
+                </div>
+
+                <div class="field">
+                    <label asp-for="Register.LastName">Last name</label>
+                    <input asp-for="Register.LastName" autocomplete="given-lastname" placeholder="Morell" required />
+                    <span asp-validation-for="Register.LastName"></span>
+                </div>
+            </div>
+
+            <div class="field">
+                <label asp-for="Register.Email">Email</label>
+                <input asp-for="Register.Email" autocomplete="email" placeholder="company@email.com" required>
+                <span asp-validation-for="Register.Email"></span>
+            </div>
+
+            <div class="field">
+                <label asp-for="Register.Password">Password</label>
+                <input asp-for="Register.Password" autocomplete="current-password" placeholder="••••••••" required>
+                <span asp-validation-for="Register.Password"></span>
+            </div>
+
+            <button type="submit" class="btn-submit">Register</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name = "_ValidationScriptsPartial" />
+    <script src="~/js/auth.js" asp-append-version="true"></script>
+}
