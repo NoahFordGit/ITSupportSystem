@@ -2,15 +2,9 @@
 [Bb]in/
 [Oo]bj/
 [Ll]og/
-[Ll]ogs/
 
 ## Visual Studio
 .vs/
-*.## Core Build Artifacts
-[Bb]in/
-[Oo]bj/
-[Ll]og/
-[Ll]ogs/
 
 ## .NET Core / .NET 5+ specific
 project.lock.json
@@ -81,7 +75,7 @@ wwwroot/lib/
 
 ## Logs
 *.log
-logs/
+/logs/
 
 ## Local configuration / secrets
 appsettings.Development.json

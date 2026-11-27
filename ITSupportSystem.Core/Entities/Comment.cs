@@ -1,0 +1,27 @@
+using System.ComponentModel.DataAnnotations;
+// using Microsoft.AspNetCore.Mvc.ModelBinding;
+
+namespace ITSupportSystem.Core.Entities;
+
+// Comment is a LINKING entity between Ticket and User (but only if user has a staff or admin role)
+// To make this simplier, Comment has a standalone PK with TicketId and User being FKs only
+public class Comment
+{
+    [Key]
+    public int CommentId {get; set;}
+
+    [StringLength(256)]
+    public string Content {get; set;} = string.Empty;
+
+    [DataType(DataType.Date)]
+    public DateTime CreatedOn {get; set;} = DateTime.UtcNow;
+
+    // Ticket fields
+    public int TicketId {get; set;}
+    public Ticket? Ticket {get; set;}
+
+    // User fields
+    public string UserId {get; set;} = string.Empty;
+    public ApplicationUser? User {get; set;}
+
+} // End class

@@ -1,0 +1,13 @@
+using ITSupportSystem.Core.Entities;
+
+namespace ITSupportSystem.Core.Interfaces;
+
+public interface ITicketRepository
+{
+    Task<IEnumerable<Ticket>> ReadAllAsync();
+    Task<Ticket?> ReadAsync(int TicketId);
+    Task<IEnumerable<Ticket>> ReadByUserAsync(string UserId);
+    Task<Ticket> CreateAsync(Ticket ticket);
+    Task<Ticket?> UpdateAsync(Ticket ticket);
+    Task<bool> DeleteAsync(Ticket ticket);
+} // End interface
