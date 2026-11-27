@@ -2,5 +2,6 @@
   <Project Path="ITSupportSystem.API.Tests/ITSupportSystem.API.Tests.csproj" />
   <Project Path="ITSupportSystem.API/ITSupportSystem.API.csproj" />
   <Project Path="ITSupportSystem.Core/ITSupportSystem.Core.csproj" />
+  <Project Path="ITSupportSystem.Web.Tests/ITSupportSystem.Web.Tests.csproj" />
   <Project Path="ITSupportSystem.Web/ITSupportSystem.Web.csproj" />
 </Solution>
