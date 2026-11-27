@@ -11,7 +11,6 @@
     --danger:       #f87171;  /* errors, softer red for dark backgrounds */
     --success:      #4ade80;  /* NEW: password checks, "resolved" status */
     --focus-ring:   rgba(99, 102, 241, 0.45); /* NEW: outline on focused inputs */
-    --danger-ring:  rgba(248, 113, 113, 0.35);
 
     --radius-sm:   6px;     /* inputs, buttons, small badges */
     --radius-md:   8px;     /* dropdowns, tab containers, alerts */
@@ -54,5 +53,5 @@
     --bs-btn-disabled-border-color: var(--brand);
 
     /* Keyboard focus glow: r, g, b of --brand-light */
-    --bs-btn-focus-box-shadow:      0 0 0 0.25rem var(--focus-ring);
+    --bs-btn-focus-box-shadow-rgb:      0 0 0 0.25rem var(--focus-ring);
 }
