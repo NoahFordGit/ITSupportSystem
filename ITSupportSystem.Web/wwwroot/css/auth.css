@@ -8,13 +8,19 @@
 }
 
 .auth-logo{
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
+    bottom: 100%;
     gap: 10px;
-    font-size: 22px;
+    font-size: 32px;
     font-weight: 500;
     margin-bottom: 20px;
 }
 
 .auth-card{
+    position: relative;
     width: 100%;
     max-width: 420px;
     background-color: var(--surface);
