@@ -1,26 +1,146 @@
+@using Microsoft.AspNetCore.Identity
+@using ITSupportSystem.Core.Entities
 @model IEnumerable<ITSupportSystem.Core.Entities.Ticket>
 @{
     ViewData["Title"] = "Tickets";
+    var isStaff = User.IsInRole("Staff");
+    var isAdmin = User.IsInRole("Admin");
+    var canSeeAll = isStaff || isAdmin;
+    var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "";
 }
-<h1>Tickets Index</h1>
-<p>View all tickets</p>
 
-<button id="openCreateBtn" type="button" class="btn btn-primary">Create a Ticket</button>
 
-<table id="ticketTable" class="table table-striped align-middle">
-    <thead>
-        <tr>
-            <th scope="col">TicketId</th>
-            <th scope="col">Title</th>
-            <th scope="col">Description</th>
-            <th scope="col">Priority</th>
-            <th scope="col">Status</th>
-            <th scope="col">CreatedAt</th>
-            <th scope="col">UpdatedAt</th>
-        </tr>
-    </thead>
-    <tbody>
-        
-    </tbody>
+<!-- data-api-base comes from appsettings.json "API:BaseUrl", via the controller's ViewData. -->
+<div id="ticketApp" data-api-base="@ViewData["ApiBaseAddress"]"
+     data-can-see-all="@canSeeAll.ToString().ToLower()"
+     data-current-user-id="@currentUserId">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Tickets</h1>
+        <button id="openCreateBtn" type="button" class="btn btn-primary">New Ticket</button>
+    </div>
 
-</table>
+    <div id="errorAlert" class="alert alert-danger d-none" role="alert"></div>
+
+    <table id="ticketTable" class="table table-striped align-middle">
+        <caption>Tickets stored by the Tickets API</caption>
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Title</th>
+                <th scope="col">Priority</th>
+                <th scope="col">Status</th>
+                <th scope="col">Created</th>
+                <th scope="col"><span class="visually-hidden">Actions</span></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td colspan="6">Loading...</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Create: POST api/tickets. -->
+<dialog id="createDialog" aria-labelledby="createTitle">
+    <form id="createTicketForm">
+        <h2 id="createTitle" class="h4 mb-3">New Ticket</h2>
+        <div class="dialog-error alert alert-danger d-none" role="alert"></div>
+        <div class="mb-2">
+            <label for="createTitleInput" class="form-label">Title</label>
+            <input id="createTitleInput" name="Title" class="form-control" maxlength="256" required autofocus />
+        </div>
+        <div class="mb-2">
+            <label for="createDescription" class="form-label">Description</label>
+            <textarea id="createDescription" name="Description" class="form-control" rows="4" maxlength="256"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="createPriority" class="form-label">Priority</label>
+            <select id="createPriority" name="Priority" class="form-select">
+                @foreach (var p in Enum.GetValues<Priority>())
+                {
+                    <option value="@p" selected="@(p == Priority.Medium)">@p</option>
+                }
+            </select>
+        </div>
+        <div class="d-flex justify-content-end gap-2">
+            <button type="button" class="btn btn-secondary close-btn">Cancel</button>
+            <button type="submit" class="btn btn-primary">Create</button>
+        </div>
+    </form>
+</dialog>
+
+<!-- Edit: PUT api/tickets/{id} -->
+<dialog id="editDialog" aria-labelledby="editTitle">
+    <form id="editTicketForm">
+        <h2 id="editTitle" class="h4 mb-3">Edit Ticket</h2>
+        <div class="dialog-error alert alert-danger d-none" role="alert"></div>
+        <input type="hidden" name="Id" />
+        <input type="hidden" name="OriginalStatus" />
+        <div class="mb-2">
+            <label for="editTitleInput" class="form-label">Title</label>
+            <input id="editTitleInput" name="Title" class="form-control" maxlength="256" required autofocus />
+        </div>
+        <div class="mb-2">
+            <label for="editDescription" class="form-label">Description</label>
+            <textarea id="editDescription" name="Description" class="form-control" rows="4" maxlength="256" required></textarea>
+        </div>
+        <div class="mb-2">
+            <label for="editPriority" class="form-label">Priority</label>
+            <select id="editPriority" name="Priority" class="form-select">
+                @foreach (var p in Enum.GetValues<Priority>())
+                {
+                    <option value="@p">@p</option>
+                }
+            </select>
+        </div>
+        @if (canSeeAll)
+        {
+            <div class="mb-3">
+                <label for="editStatus" class="form-label">Status</label>
+                <select id="editStatus" name="Status" class="form-select">
+                    @foreach (var s in Enum.GetValues<Status>())
+                    {
+                        <option value="@s">@Display(s)</option>
+                    }
+                </select>
+            </div>
+        }
+        <div class="d-flex justify-content-end gap-2">
+            <button type="button" class="btn btn-secondary close-btn">Cancel</button>
+            <button type="submit" class="btn btn-success">Save</button>
+        </div>
+    </form>
+</dialog>
+
+<!-- Delete: DELETE api/tickets/{id} - Admin only -->
+@if (isAdmin)
+{
+    <dialog id="deleteDialog" aria-labelledby="deleteTitle">
+        <form id="deleteTicketForm">
+            <h2 id="deleteTitle" class="h4 mb-3">Delete Ticket</h2>
+            <div class="dialog-error alert alert-danger d-none" role="alert"></div>
+            <input type="hidden" name="Id" />
+            <p>Are you sure you want to delete ticket #<strong id="deleteTicketId"></strong>,
+               <strong id="deleteTicketName"></strong>? Its comments and logs will be deleted too.</p>
+            <div class="d-flex justify-content-end gap-2">
+                <button type="button" class="btn btn-secondary close-btn" autofocus>Cancel</button>
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </div>
+        </form>
+    </dialog>
+}
+
+@section Scripts {
+    <script type="module" src="~/js/Ticket/ticket.js" asp-append-version="true"></script>
+}
+
+
+@functions {
+    static string Display(Enum value)
+    {
+        var name = value.ToString();
+        var field = value.GetType().GetField(name);
+        var display = field?.GetCustomAttributes(typeof(System.ComponentModel.DataAnnotations.DisplayAttribute), false)
+            .Cast<System.ComponentModel.DataAnnotations.DisplayAttribute>().FirstOrDefault();
+        return display?.Name ?? name;
+    }
+}

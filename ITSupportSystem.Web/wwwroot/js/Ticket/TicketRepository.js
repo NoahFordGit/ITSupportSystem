@@ -2,12 +2,14 @@ export class TicketRepository {
     #baseAddress
 
     constructor(baseAddress) {
-        this.#baseAddress = baseAddress;
+        this.#baseAddress = baseAddress.replace(/\/+$/, "");
     } // End constructor
 
-
     async #send(path = "", options = {}) {
-        const response = await fetch(`${this.#baseAddress}${path}`, options);
+        const response = await fetch(`${this.#baseAddress}${path}`, {
+            headers: { "Content-Type": "application/json" },
+            ...options
+        });
         if (!response.ok) {
             const detail = await response.text();
             throw new Error(`HTTP ${response.status} ${response.statusText}: ${detail}`);
@@ -17,37 +19,43 @@ export class TicketRepository {
         return response.json();
     } // End async
 
-    // CRRUD logic here
+    // CRUD logic here
 
-    // Read all method
-    readAll(){
-        return this.#send();
+    // Read all method 
+    readAll() {
+        return this.#send("/api/tickets");
     } // End method
 
+    // Read mine method
+    readMine() {
+        return this.#send("/api/tickets/mine");
+    } // End method
 
     // Read (one) method
     read(id) {
-        return this.#send(`$/${encodeURIComponent(id)}`);
+        return this.#send(`/api/tickets/${encodeURIComponent(id)}`);
     } // End method
-
 
     // Create method
-    create(formData) {
-        return this.#send("", { method: "POST", body: formData});
-    } // End method 
-
+    create(ticket) {
+        return this.#send("/api/tickets", { method: "POST", body: JSON.stringify(ticket) });
+    } // End method
 
     // Update method
-    update(id, formData) {
-        return this.#send(`/${encodeURIComponent(id)}`,
-                { method: "PUT", body: formData });
+    update(id, ticket) {
+        return this.#send(`/api/tickets/${encodeURIComponent(id)}`,
+                { method: "PUT", body: JSON.stringify(ticket) });
     } // End method
 
+    // Update status method
+    updateStatus(id, status) {
+        return this.#send(`/api/tickets/${encodeURIComponent(id)}/status`,
+                { method: "PUT", body: JSON.stringify({ status }) });
+    } // End method
 
-    // Delete method
+    // Delete method 
     delete(id) {
-        return this.#send(`/${encodeURIComponent(id)}`,
-                    { method: "DELETE"});
+        return this.#send(`/api/tickets/${encodeURIComponent(id)}`,
+                    { method: "DELETE" });
     } // End method
-
 } // End export

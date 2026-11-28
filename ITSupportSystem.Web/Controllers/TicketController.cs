@@ -16,6 +16,7 @@ public class TicketController : Controller
 
     public IActionResult Index()
     {
+        ViewData["ApiBaseAddress"] = _config["API:BaseUrl"];
         return View();
     } // End method
 
