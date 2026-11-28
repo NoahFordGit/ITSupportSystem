@@ -25,3 +25,49 @@ html {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+.navbar{
+  background-color: var(--surface);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+  padding: 5px 0 5px 0;
+  padding-inline: 5vw;
+  
+  --nav-gap: 32px;                              /* the one spacing value */
+  --bs-navbar-nav-link-padding-x: 0;            /* remove Bootstrap's link padding */
+  --bs-navbar-brand-margin-end: var(--nav-gap); /* space after the brand */
+}
+
+.navbar-nav{
+  gap: var(--nav-gap)
+}
+
+.navbar-brand{
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.nav-link{
+  font-size: 16px;
+  color: var(--text-muted);
+  transition: color 0.25s;
+}
+
+.nav-link:hover{
+  color: var(--brand-lighter);
+}
+
+.nav-user{
+  display: flex;
+  align-items: center;
+  gap: var(--nav-gap);
+}
+
+.nav-user-name{
+  color: var(--text);
+  font-weight: 500;
+}
+
+.nav-user form{
+  margin: 0;
+}
